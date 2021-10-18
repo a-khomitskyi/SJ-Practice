@@ -1,24 +1,20 @@
 import pymongo
 from dateutil import parser
 import script
-
-
-User = 'HaveNoMatter'
-Pass = 'QdxzpoVpM2OxpFyj'
+from config import USER, PASS
 
 
 def get_database():
-    # Provide the mongodb atlas url to connect python to mongodb using pymongo
-    CONNECTION_STRING = f"mongodb+srv://{User}:{Pass}@cluster.xslp6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-
-    # Create a connection using MongoClient. You can import MongoClient or use pymongo.MongoClien
+    """
+    :return: Connection to the Mongo DataBase
+    """
+    CONNECTION_STRING = f"mongodb+srv://{USER}:{PASS}@cluster.xslp6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    # Create a connection using MongoClient
     client = pymongo.MongoClient(CONNECTION_STRING)
-
-    # Create the database for our example (we will use the same database throughout the tutorial
     return client['users']
 
 
-def date_correct(items):
+def date_correct(items: dict) -> dict:
     """
     This function is correcting date-strings to date-format in Mongo.
     :param items: Dictionary of our data from site
@@ -30,15 +26,48 @@ def date_correct(items):
     return items
 
 
-# This is added so that many files can reuse the function get_database()
-if __name__ == "__main__":
-    # Get the database
-    dbname = get_database()
-    collection_name = dbname["data"]
-    data = date_correct(script.main())
+def drop_element(entity: dict) -> bool:
+    try:
+        assert entity  # Not empty
+        if len(entity) > 1:
+            collection_name.delete_many(entity)
+        else:
+            collection_name.delete_one(entity)
+        return True
+    except Exception as _ex:
+        print(_ex)
+        return False
 
+
+def collect_elements() -> list:
+    collection = [x for x in collection_name.find()]
+    return collection
+
+
+def insert_entity(entity: dict) -> bool:
+    try:
+        assert entity  # Entity not empty
+        if len(entity) > 1:
+            collection_name.insert_many(entity)
+        else:
+            collection_name.delete_one(entity)
+        return True
+    except Exception as _ex:
+        print(_ex)
+        return False
+
+
+def main():
+    # dbname = get_database()
+    # Get the collection from DB
+    # collection_name = dbname["data"]
+    # Correcting dates
+    data = date_correct(script.main())
+    # Pushing changes to DB
     collection_name.insert_many(data)
 
 
-
-
+if __name__ == "__main__":
+    dbname = get_database()
+    collection_name = dbname["data"]
+    main()

@@ -7,7 +7,11 @@ PARAMS = {'results': 100,
           'gender': 'male'}
 
 
-def get_contents(url):
+def get_contents(url: str) -> dict:
+    """
+    :param Entrypoint to REST API
+    :return: Dictionary of random user data
+    """
     tmp = requests.get(url=url, params=PARAMS).json()
     results = tmp['results']
     return results
