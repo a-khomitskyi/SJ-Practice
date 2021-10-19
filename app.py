@@ -42,5 +42,6 @@ def del_item():
 
 
 if __name__ == '__main__':
-    db.initialize()
+    if not db.get_database().list_collection_names():
+        db.initialize()
     app.run(debug=True)
