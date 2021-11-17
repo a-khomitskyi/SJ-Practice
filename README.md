@@ -2,7 +2,7 @@
 
 ### Micro RESTful API
 
-#### Entrypoint --> http://havenomatter.herokuapp.com/api/
+#### Entrypoint --> http://localhost/api/
 
 #### Available methods:
 ##### [GET] - Collect all of elements from DB.collection
