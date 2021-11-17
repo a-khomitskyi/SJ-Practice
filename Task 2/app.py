@@ -5,7 +5,7 @@ from aggregator import parse
 app = Flask(__name__)
 
 
-@app.route('/convert_curreny/', methods=['GET'])
+@app.route('/convert_currency/', methods=['GET'])
 def convert_func():
     user_currency = request.args.get('currency')
     user_amount = request.args.get('amount')
